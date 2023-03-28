@@ -1,4 +1,6 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 
 let items = [
@@ -27,9 +29,30 @@ let items = [
 ]
 
 const CartList = () => {
-    return <section className="text-bg-light">
+
+    const {items} =useSelector((s)=> s.cart)
+
+    const dispatch = useDispatch()
+
+    function handleIncItem(id){
+        dispatch({type:"INC_ITEM_COUNT", payload:id})
+    }
+    function handleDecItem(id){
+        dispatch({type:"DEC_ITEM_COUNT", payload:id})
+    }
+    function handleRemoveItem(id){
+        dispatch({type:"REMOVE_FROM_CART", payload:id})
+    }
+
+    return <section className="text-bg-light my-5 w-75 m-auto">
         <div className="container py-4">
-            <h1>Your Cart</h1>
+            <div className="d-flex justify-content-between">
+                <h1>Your Cart</h1>
+                <span>Total: ${items.reduce((p,c)=> p+c.product.price*c.count, 0).toFixed(2)}</span>
+            </div>
+
+            {items.length === 0 && <h2 className='text-center'>Cart is empty</h2>}
+
             <ul className="list-group">
                 {
 
@@ -48,11 +71,12 @@ const CartList = () => {
                                 ${item.product.price}
                             </div>
                             <div className='col-md-1 d-flex align-items-center justify-content-between'>
-                                <button className="btn btn-secondary">
+                                <button className="btn btn-secondary" onClick={()=>handleDecItem(item.product.id)}
+                                disabled={item.count===1 }>
                                     -
                                 </button>
                                 <span> {item.count}</span>
-                                <button className="btn btn-secondary">
+                                <button className="btn btn-secondary" onClick={()=>handleIncItem(item.product.id)}>
                                     +
                                 </button>
                             </div>
@@ -61,7 +85,7 @@ const CartList = () => {
                             </div>
                             <div className="col-md-1">
                                 <button className="btn btn-danger">
-                                    <i className="fa-solid fa-trash"></i>
+                                    <i className="fa-solid fa-trash" onClick={()=>handleRemoveItem(item.product.id)} ></i>
                                 </button>
 
                             </div>
@@ -73,8 +97,8 @@ const CartList = () => {
             </ul>
 
             <div className="d-flex justify-content-between">
-                <button className="btn btn-outline-danger"> <i className="fa-solid fa-arrow-left"> </i> Back to shopping</button>
-                <button className="btn btn-outline-success"> Proceed to payment <i className="fa-solid fa-arrow-right"></i></button>
+                <Link to={'/'} className="btn btn-outline-danger"> <i className="fa-solid fa-arrow-left"> </i> Back to shopping</Link>
+                <button className="btn btn-outline-success" disabled={items.length===0}> Proceed to payment <i className="fa-solid fa-arrow-right"></i></button>
             </div>
 
         </div>

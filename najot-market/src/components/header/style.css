@@ -1,0 +1,17 @@
+/*  responsive 
+
+@media only screen and (max-width:995px) and (min-width: 768px) {
+    
+    .logo-responsive{
+        font-size: 10px;
+        font-weight: 400;
+        max-width: 120px;
+        width: 100%;
+    }
+    
+    .btnreponsive{
+        width: 50px;
+        font-size: small;
+        font-weight: 400;
+    } 
+ }  */
